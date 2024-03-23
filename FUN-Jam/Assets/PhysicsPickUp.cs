@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PhysicsPickUp : MonoBehaviour
 {
+    public static PhysicsPickUp instance;
+
     [SerializeField]
     private float forceApplied;
-    [SerializeField]
-    private float range;
+    public float range;
     [SerializeField]
     private float maxVelocity;
     [SerializeField]
@@ -19,6 +20,11 @@ public class PhysicsPickUp : MonoBehaviour
     RaycastHit hit;
 
     private bool hasTarget;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Update()
     {
