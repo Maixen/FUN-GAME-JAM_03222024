@@ -9,17 +9,36 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent agent;
 
     [SerializeField]
+    private GameObject inventory;
+
+    [SerializeField]
     private Transform playerObj;
 
     [SerializeField]
     private float followDistance;
     [SerializeField]
     private float attackDistance;
+    [SerializeField]
+    private float attackDamage;
+    [SerializeField]
+    private float attackTime;
+    private bool canAttack;
 
     [SerializeField]
     private int health;
 
+    [SerializeField]
+    private List<Transform> patrolPoints = new List<Transform>();
+
+    private int currentPatrolPoint;
+
     private float distanceToPlayer;
+
+    private void Start()
+    {
+        currentPatrolPoint = 0;
+        canAttack = true;
+    }
 
     private void Update()
     {
@@ -29,7 +48,14 @@ public class Enemy : MonoBehaviour
         {
             agent.SetDestination(transform.position);
 
-            // Attack player
+            if (canAttack )
+            {
+                canAttack = false;
+
+                playerObj.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
+
+                Invoke(nameof(ResetAttack), attackTime);
+            }
         }
         else if (distanceToPlayer <= followDistance)
         {
@@ -37,8 +63,23 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            // Do a patrol routine
+            if (Vector3.Distance(transform.position, patrolPoints[currentPatrolPoint].position) < 1f)
+            {
+                currentPatrolPoint++;
+
+                if (currentPatrolPoint > patrolPoints.Count - 1)
+                {
+                    currentPatrolPoint = 0;
+                }
+            }
+
+            agent.SetDestination(patrolPoints[currentPatrolPoint].position);
         }
+    }
+
+    private void ResetAttack()
+    {
+        canAttack = true;
     }
 
     public void TakeDamage(int damage)
@@ -57,6 +98,8 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        Instantiate(inventory, transform.position, Quaternion.identity);
+
         Destroy(gameObject);
     }
 
@@ -70,5 +113,18 @@ public class Enemy : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, playerObj.position);
+        Gizmos.DrawLine(transform.position, agent.destination);
+
+        Gizmos.color = Color.blue;
+
+        for (int i = 0; i < patrolPoints.Count - 1; i++)
+        {
+            if (patrolPoints.Count -1 >= i + 1)
+            {
+                Gizmos.DrawLine(patrolPoints[i].position, patrolPoints[i + 1].position);
+            }
+        }
+
+        Gizmos.DrawLine(patrolPoints[patrolPoints.Count - 1].position, patrolPoints[0].position);
     }
 }
