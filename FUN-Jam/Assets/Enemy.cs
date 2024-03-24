@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,6 +13,11 @@ public class Enemy : MonoBehaviour
     private GameObject inventory;
 
     [SerializeField]
+    private GameObject deathEffect;
+    [SerializeField]
+    private float destroyDeathEffect;
+
+    [SerializeField]
     private Transform playerObj;
 
     [SerializeField]
@@ -22,6 +28,8 @@ public class Enemy : MonoBehaviour
     private float attackDamage;
     [SerializeField]
     private float attackTime;
+    [SerializeField]
+    private float attackedNormalTime;
     private bool canAttack;
 
     [SerializeField]
@@ -33,6 +41,8 @@ public class Enemy : MonoBehaviour
     private int currentPatrolPoint;
 
     private float distanceToPlayer;
+
+    private float hit;
 
     private void Start()
     {
@@ -61,6 +71,11 @@ public class Enemy : MonoBehaviour
         {
             agent.SetDestination(playerObj.position);
         }
+        else if (hit > 0f)
+        {
+            hit -= Time.deltaTime;
+            agent.SetDestination(playerObj.position);
+        }
         else
         {
             if (Vector3.Distance(transform.position, patrolPoints[currentPatrolPoint].position) < 1f)
@@ -86,6 +101,8 @@ public class Enemy : MonoBehaviour
     {
         health -= damage;
 
+        hit = attackedNormalTime;
+
         if (health <= 0)
         {
             Die();
@@ -99,6 +116,9 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         Instantiate(inventory, transform.position, Quaternion.identity);
+
+        GameObject deathEffectInstantiation = Instantiate(deathEffect, transform.position, Quaternion.identity);
+        Destroy(deathEffectInstantiation, destroyDeathEffect);
 
         Destroy(gameObject);
     }
@@ -126,5 +146,10 @@ public class Enemy : MonoBehaviour
         }
 
         Gizmos.DrawLine(patrolPoints[patrolPoints.Count - 1].position, patrolPoints[0].position);
+
+        foreach (Transform patrolPoint in patrolPoints)
+        {
+            Gizmos.DrawSphere(patrolPoint.position, 0.25f);
+        }
     }
 }

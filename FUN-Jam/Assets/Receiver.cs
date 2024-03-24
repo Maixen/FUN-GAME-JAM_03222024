@@ -1,21 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Receiver : MonoBehaviour
 {
+    [SerializeField]
+    private TextMeshPro partsNeededDisplay;
     [SerializeField]
     private int partsNeeded;
     [SerializeField]
     private LayerMask pickup;
 
+    private bool won;
+
+    private void OnEnable()
+    {
+        won = false;
+    }
+
     private void Update()
     {
         RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, 2, Vector3.forward, 2, pickup);
 
-        if (rayHits.Length >= partsNeeded)
+        partsNeededDisplay.text = $"{rayHits.Length} / {partsNeeded}";
+
+        if (rayHits.Length >= partsNeeded && won == false)
         {
-            Debug.Log("You won");
+            won = true;
+            GameManager.instance.LoadNextLevel();
         }
     }
 

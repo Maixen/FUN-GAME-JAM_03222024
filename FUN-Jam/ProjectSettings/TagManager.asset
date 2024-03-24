@@ -12,7 +12,7 @@ TagManager:
   - Water
   - UI
   - whatIsPlayer
-  - 
+  - playerBorder
   - 
   - whatIsWall
   - whatIsGround
@@ -23,7 +23,7 @@ TagManager:
   - 
   - 
   - pickup
-  - 
+  - pickupBorder
   - 
   - postProcessing
   - dontRender

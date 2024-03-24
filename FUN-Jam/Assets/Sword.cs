@@ -13,6 +13,10 @@ public class Sword : MonoBehaviour
     [SerializeField]
     private float swipeTimeBuffer;
     [SerializeField]
+    private float swipeTransitionDuration;
+    [SerializeField]
+    private TrailRenderer trailOnTop;
+    [SerializeField]
     private Transform attackPoint;
     [SerializeField]
     private float radius;
@@ -26,6 +30,7 @@ public class Sword : MonoBehaviour
     private void OnEnable()
     {
         readyToAttack = true;
+        trailOnTop.emitting = false;
     }
 
     private void Update()
@@ -51,12 +56,22 @@ public class Sword : MonoBehaviour
 
             a.SetBool("Sword", true);
 
+            if (swipeRight)
+                Invoke(nameof(EmitTrail), swipeTransitionDuration);
+            else
+                EmitTrail();
+
             Invoke(nameof(ResetAnimator), swipeTime + swipeTimeBuffer);
 
             GetComponentInChildren<Effex>()?.OnFire();
 
             Invoke(nameof(ResetShoot), resetTime);
         }
+    }
+
+    private void EmitTrail()
+    {
+        trailOnTop.emitting = true;
     }
 
     private void ResetShoot()
@@ -67,6 +82,7 @@ public class Sword : MonoBehaviour
     private void ResetAnimator()
     {
         a.SetBool("Sword", false);
+        trailOnTop.emitting = false;
     }
 
     private void OnDrawGizmos()
