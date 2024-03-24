@@ -730,7 +730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2cb860d5dc268499b86fee5ee91e76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scene: FirstBootScene
+  scene: Sequence
   startOrSkip: 13
   timeToGoOn: -1
 --- !u!4 &1975188622

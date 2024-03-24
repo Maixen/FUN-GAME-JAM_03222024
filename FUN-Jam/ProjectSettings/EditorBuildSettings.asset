@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/OnBoot.unity
     guid: 91b063a209afdee47b3c1909e2a51346
   - enabled: 1
-    path: Assets/Scenes/FirstBootScene.unity
+    path: Assets/Scenes/Sequence.unity
     guid: 83deed5697e01ef40802f2083e26a46f
   - enabled: 1
     path: Assets/Scenes/LevelOne 1.unity
