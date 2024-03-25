@@ -30,6 +30,7 @@ public class ChangeScene : MonoBehaviour
 
     private void LoadScene()
     {
-        SceneManager.LoadScene(scene);
+        if (PlayerPrefs.GetString("lastScene") != "OnEnd")
+            SceneManager.LoadScene(PlayerPrefs.GetString("lastScene"));
     }
 }
