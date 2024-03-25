@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     private KeyCode reloadScene;
     [SerializeField]
     private Animator a;
+    [SerializeField]
+    private TextMeshProUGUI textForReopening;
 
     [SerializeField]
     private float startAnimationTime;
@@ -57,11 +60,11 @@ public class GameManager : MonoBehaviour
 
     public void LoadNextLevel()
     {
-        if (nextSceneName != ":WIN")
-        {
-            SceneManager.LoadScene(nextSceneName);
-            return;
-        }
+        if (reloading) { return; }
+
+        reloading = true;
+
+        StartCoroutine(LoadNextSceneWithEffect());
     }
 
     public void ReloadScene(bool death)
@@ -86,5 +89,17 @@ public class GameManager : MonoBehaviour
 
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentSceneName);
+    }
+
+    IEnumerator LoadNextSceneWithEffect()
+    {
+        textForReopening.text = $"Loading next level";
+        a.SetBool("GameReload", true);
+
+        Time.timeScale = 0.1f;
+
+        yield return new WaitForSeconds(0.75f);
+
+        SceneManager.LoadScene(nextSceneName);
     }
 }

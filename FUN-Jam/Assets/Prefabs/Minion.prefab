@@ -59,7 +59,7 @@ MonoBehaviour:
   followDistance: 5
   attackDistance: 1.75
   attackDamage: 15
-  attackTimeFirst: 1
+  attackTimeFirst: 0.5
   attackTimeReset: 2.5
   attackedNormalTime: 5
   health: 100
@@ -296,6 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b420becbbf75514ea67b64216fe5841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isClue: 0
   player: {fileID: 0}
   rangeToScale: 10
   rangeToDisapear: 20
