@@ -31,7 +31,8 @@ public class RandomName : MonoBehaviour
         "[Computer-Bug]\r\nname: Jake"
     };
 
-
+    [SerializeField]
+    private bool isClue;
     [SerializeField]
     private Transform player;
     [SerializeField]
@@ -46,7 +47,8 @@ public class RandomName : MonoBehaviour
     {
         targetText = GetComponent<TextMeshPro>();
         startSize = targetText.fontSize;
-        targetText.text = names[Random.Range(0, names.Length)];
+        if (!isClue)
+            targetText.text = names[Random.Range(0, names.Length)];
     }
 
     private void Update()

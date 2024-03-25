@@ -79,7 +79,10 @@ public class Enemy : MonoBehaviour
             {
                 canAttack = false;
 
-                playerObj.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
+                playerObj.GetComponent<PlayerHealth>()?.TakeDamage(attackDamage);
+                playerObj.GetComponentInParent<PlayerHealth>()?.TakeDamage(attackDamage);
+
+
                 StopAllCoroutines();
                 StartCoroutine(ResetAttack());
             }
@@ -158,7 +161,8 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        Instantiate(inventory, transform.position, Quaternion.identity);
+        if (inventory != null)
+            Instantiate(inventory, transform.position, Quaternion.identity);
 
         GameObject deathEffectInstantiation = Instantiate(deathEffect, transform.position, Quaternion.identity);
         deathEffect.transform.localScale = new Vector3(3, 3, 3);
